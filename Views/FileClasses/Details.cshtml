@@ -1,0 +1,53 @@
+﻿@model MediaOrganiser1.Models.FileClass
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>FileClass</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ContentType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ContentType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Category)
+        </dd>
+    </dl>
+
+    @if (Model.Genre != null) 
+    { 
+
+        <audio controls src="data:audio/mp3;base64, @System.Convert.ToBase64String(Model.File)" />
+    }
+    else 
+    { 
+
+        <video controls scr="data:video/mp4;base64, @System.Convert.ToBase64String(Model.File)" />
+
+    }
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.FileClassId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
