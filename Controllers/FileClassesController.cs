@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MediaOrganiser1.Models;
+using PagedList;
 
 namespace MediaOrganiser1.Controllers
 {
@@ -15,11 +16,56 @@ namespace MediaOrganiser1.Controllers
         private FileUploadDb db = new FileUploadDb();
 
         // GET: FileClasses
-        public ActionResult Index()
+        public ActionResult Index(string Sorting_Order, string Search_Data, string Filter_Value, int? Page_No)
         {
-            return View(db.FileClasses.ToList());
-        }
+            ViewBag.SortingName = String.IsNullOrEmpty(Sorting_Order) ? "Name" : "";
+            ViewBag.SortingDate = String.IsNullOrEmpty(Sorting_Order) ? "Uploaded" : "";
+            ViewBag.SortingGenre = String.IsNullOrEmpty(Sorting_Order) ? "Genre" : "";
 
+            if (Search_Data != null)
+            {
+                Page_No = 1;
+            }
+            else
+            {
+                Search_Data = Filter_Value;
+            }
+
+            ViewBag.FilterValue = Search_Data;
+
+
+            var fileClasses = from c in db.FileClasses select c;
+
+            switch (Sorting_Order)
+            {
+                case "Name":
+                    fileClasses = fileClasses.OrderBy(c => c.Name);
+                    break;
+                case "Uploaded":
+                    fileClasses = fileClasses.OrderBy(c => c.FileClassId);
+                    break;
+                case "Genre":
+                    fileClasses = fileClasses.OrderBy(c => c.Genre);
+                    break;
+                case "FileName":
+                    fileClasses = fileClasses.OrderBy(c => c.File);
+                    break;
+                default:
+                    fileClasses = fileClasses.OrderBy(c => c.Name);
+                    break;
+            }
+
+            if (Search_Data != null)
+            {
+                fileClasses = fileClasses.Where(stu => stu.Name.ToUpper().Contains(Search_Data.ToUpper())
+                    || stu.Genre.ToUpper().Contains(Search_Data.ToUpper()));
+            }
+
+            int Size_Of_Page = 7;
+            int No_oF_Page = (Page_No ?? 1);
+            return View(fileClasses.ToPagedList(No_oF_Page, Size_Of_Page));
+        }
+        
         // GET: FileClasses/Details/5
         public ActionResult Details(int? id)
         {

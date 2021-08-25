@@ -1,51 +1,72 @@
-﻿@model IEnumerable<MediaOrganiser1.Models.FileClass>
-
+﻿@model PagedList.IPagedList<MediaOrganiser1.Models.FileClass>
+@using PagedList.Mvc;
 @{
     ViewBag.Title = "Index";
 }
 
 <h2>Index</h2>
 
+@using (Html.BeginForm())
+{
+    <p>
+        @Html.TextBox("Search_Data", ViewBag.FilterValue as string)
+        <input type="submit" value="Find" />
+    </p>
+}
+
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.ActionLink("Upload Order", "Index", new { Sorting_Order = ViewBag.SortingDate })
         </th>
+
         <th>
-            @Html.DisplayNameFor(model => model.ContentType)
+            @Html.ActionLink("Title", "Index", new { Sorting_Order = ViewBag.SortingName })
         </th>
+
         <th>
-            @Html.DisplayNameFor(model => model.Genre)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().File)
         </th>
+
         <th>
-            @Html.DisplayNameFor(model => model.Category)
+            @Html.ActionLink("Genre", "Index", new { Sorting_Order = ViewBag.SortingGenre })
         </th>
+
+
     </tr>
 
-@foreach (var item in Model) {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.Name)
-    </td>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.File)
+            </td>
 
-    <td>
-        @Html.DisplayFor(modelItem => item.ContentType)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Genre)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Category)
-    </td>
-    <td>
-        @Html.ActionLink("Edit", "Edit", new { id = item.FileClassId }) |
-        @Html.ActionLink("Details", "Details", new { id = item.FileClassId }) |
-        @Html.ActionLink("Delete", "Delete", new { id = item.FileClassId })
-    </td>
-</tr>
-}
+            <td>
+                @Html.DisplayFor(modelItem => item.ContentType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Genre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.FileClassId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.FileClassId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.FileClassId })
+            </td>
+        </tr>
+    }
 
 </table>
+
+<br />
+
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+@Html.PagedListPager(Model, Page_No => Url.Action("Index",
+    new { Page_No, Sorting_Order = ViewBag.CurrentSortOrder, Filter_Value = ViewBag.FilterValue }))

@@ -43,10 +43,14 @@
     else 
     { 
 
-        <video controls scr="data:video/mp4;base64, @System.Convert.ToBase64String(Model.File)" />
+        <img src="data:image;base64, @System.Convert.ToBase64String(Model.File)" />
 
     }
 </div>
+
+<style>
+    
+</style>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.FileClassId }) |
     @Html.ActionLink("Back to List", "Index")

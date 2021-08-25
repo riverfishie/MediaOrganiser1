@@ -33,8 +33,8 @@
         <div class="col-md-10">
             @Html.Label("Music")
             @Html.RadioButtonFor(m => m.Category, "Audio", htmlAttributes: new { @class = "radiobutton1", @id = "radiobutton1"})
-            @Html.Label("Video")
-            @Html.RadioButtonFor(m => m.Category, "Video", htmlAttributes: new { @class = "radiobutton2", @id = "radiobutton2" })
+            @Html.Label("Photo")
+            @Html.RadioButtonFor(m => m.Category, "Photo", htmlAttributes: new { @class = "radiobutton2", @id = "radiobutton2" })
             @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -54,7 +54,7 @@
                  new SelectListItem(){ Text= "Upbeat", Value = "Relaxing"},
                  new SelectListItem(){ Text= "Motivational", Value = "Action"},
                  new SelectListItem(){ Text= "Emotional", Value = "Upbeat"},
-                 new SelectListItem(){ Text= "Ac", Value = "Upbeat"},
+                 new SelectListItem(){ Text= "Action", Value = "Upbeat"},
             }, "Select Genre")
             @Html.ValidationMessageFor(model => model.Genre, "", new { @class = "text-danger" })
         </div>
