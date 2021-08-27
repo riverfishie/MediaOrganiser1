@@ -64,11 +64,12 @@ namespace MediaOrganiser1.Controllers
                     break;
             }
 
-            if (Search_Data != null)
+            if (!string.IsNullOrEmpty(Search_Data))
             {
                 fileClasses = fileClasses.Where(classes => classes.Name.ToUpper().Contains(Search_Data.ToUpper())
                     || classes.Genre.ToUpper().Contains(Search_Data.ToUpper()));
             }
+
 
             int Size_Of_Page = 17;
             int No_oF_Page = (Page_No ?? 1);
@@ -103,7 +104,11 @@ namespace MediaOrganiser1.Controllers
         {
             if (ModelState.IsValid)
    
-            {
+            { 
+                if (fileClass.Category == "Photo")
+                {
+                    fileClass.Genre = null;
+                }
                 if (upload != null)
                 {
                     int fileLength = upload.ContentLength;
