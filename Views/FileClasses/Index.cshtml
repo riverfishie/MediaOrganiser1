@@ -21,16 +21,16 @@
 <table class="table">
     <tr>
         <th>
+            @Html.ActionLink("Name", "Index", new { Sorting_Order = ViewBag.SortingName })
+        </th>
+
+        <th>
             @Html.ActionLink("Upload Order", "Index", new { Sorting_Order = ViewBag.SortingDate })
         </th>
 
-        <th>
-            @Html.ActionLink("Title", "Index", new { Sorting_Order = ViewBag.SortingName })
-        </th>
-
-        <th>
-            @Html.DisplayNameFor(model => model.FirstOrDefault().File)
-        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Name)
+        </th>*@
 
         <th>
             @Html.ActionLink("Genre", "Index", new { Sorting_Order = ViewBag.SortingGenre })
@@ -43,7 +43,7 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.File)
+                @Html.DisplayFor(modelItem => item.Name)
             </td>
 
             <td>
