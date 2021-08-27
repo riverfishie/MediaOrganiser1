@@ -1,15 +1,15 @@
 ﻿@model PagedList.IPagedList<MediaOrganiser1.Models.FileClass>
 @using PagedList.Mvc;
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Uploaded Media";
 }
 
-<h2>Index</h2>
+<h1 style="padding: 30px 10px 40px 10px">Uploaded Media</h1>
 
 @using (Html.BeginForm())
 {
     <p>
-        @Html.TextBox("Search_Data", ViewBag.FilterValue as string)
+        @Html.TextBox("Search_Data", ViewBag.FilterValue as string, null, new { @placeholder = "Search by Keyword"})
         <input type="submit" value="Find" />
     </p>
 }
@@ -25,7 +25,7 @@
         </th>
 
         <th>
-            @Html.ActionLink("Upload Order", "Index", new { Sorting_Order = ViewBag.SortingDate })
+            @Html.ActionLink("Content Type", "Index", new { Sorting_Order = ViewBag.SortingContentType })
         </th>
 
         @*<th>
@@ -34,6 +34,14 @@
 
         <th>
             @Html.ActionLink("Genre", "Index", new { Sorting_Order = ViewBag.SortingGenre })
+        </th>
+
+        <th>
+            @Html.DisplayName("Category")
+        </th>
+
+        <th>
+            @Html.DisplayName(".")
         </th>
 
 
@@ -66,6 +74,8 @@
 </table>
 
 <br />
+
+@* Paging display *@
 
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 @Html.PagedListPager(Model, Page_No => Url.Action("Index",

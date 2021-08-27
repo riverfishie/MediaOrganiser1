@@ -2,10 +2,16 @@
     ViewBag.Title = "Home Page";
 }
 
-<h1>
+<style>
+    a:hover 
+    {
+        color: hotpink;
+    }
+</style>
+<h1 style="">
     <a href="@Url.Action("Create", "FileClasses")">UPLOAD MEDIA</a>
 </h1>
 
-<h1>
+<h1 style="">
     <a href="@Url.Action("Index", "FileClasses")">VIEW MEDIA</a>
 </h1>

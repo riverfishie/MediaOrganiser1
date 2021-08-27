@@ -15,12 +15,14 @@ namespace MediaOrganiser1.Controllers
     {
         private FileUploadDb db = new FileUploadDb();
 
-        // GET: FileClasses
+        // FileClasses
         public ActionResult Index(string Sorting_Order, string Search_Data, string Filter_Value, int? Page_No)
         {
             ViewBag.SortingName = String.IsNullOrEmpty(Sorting_Order) ? "Name" : "";
-            ViewBag.SortingDate = String.IsNullOrEmpty(Sorting_Order) ? "Uploaded" : "";
+            ViewBag.SortingContentType = String.IsNullOrEmpty(Sorting_Order) ? "ContentType" : "";
             ViewBag.SortingGenre = String.IsNullOrEmpty(Sorting_Order) ? "Genre" : "";
+            //Don't think this line is needed - test
+            //ViewBag.SortingCategory = Boolean.(Sorting_Order ? "Category" : "");
 
             if (Search_Data != null)
             {
@@ -31,25 +33,32 @@ namespace MediaOrganiser1.Controllers
                 Search_Data = Filter_Value;
             }
 
+
+
             ViewBag.FilterValue = Search_Data;
 
 
             var fileClasses = from c in db.FileClasses select c;
+            //
 
             switch (Sorting_Order)
             {
                 case "Name":
                     fileClasses = fileClasses.OrderBy(c => c.Name);
                     break;
-                case "Uploaded":
-                    fileClasses = fileClasses.OrderBy(c => c.FileClassId);
+                case "ContentType":
+                    fileClasses = fileClasses.OrderBy(c => c.ContentType);
                     break;
+                // Don't want FileClassId to be displayed - removing ordering by order uploaded
+                //case "Uploaded":
+                //    fileClasses = fileClasses.OrderBy(c => c.FileClassId);
+                //    break;
                 case "Genre":
                     fileClasses = fileClasses.OrderBy(c => c.Genre);
                     break;
-                case "FileName":
-                    fileClasses = fileClasses.OrderBy(c => c.File);
-                    break;
+                //case "Category":
+                //    fileClasses = fileClasses.OrderBy(c => c.Category);
+                //    break;
                 default:
                     fileClasses = fileClasses.OrderBy(c => c.Name);
                     break;
@@ -57,16 +66,16 @@ namespace MediaOrganiser1.Controllers
 
             if (Search_Data != null)
             {
-                fileClasses = fileClasses.Where(stu => stu.Name.ToUpper().Contains(Search_Data.ToUpper())
-                    || stu.Genre.ToUpper().Contains(Search_Data.ToUpper()));
+                fileClasses = fileClasses.Where(classes => classes.Name.ToUpper().Contains(Search_Data.ToUpper())
+                    || classes.Genre.ToUpper().Contains(Search_Data.ToUpper()));
             }
 
-            int Size_Of_Page = 7;
+            int Size_Of_Page = 17;
             int No_oF_Page = (Page_No ?? 1);
             return View(fileClasses.ToPagedList(No_oF_Page, Size_Of_Page));
         }
         
-        // GET: FileClasses/Details/5
+        // Details
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -81,15 +90,13 @@ namespace MediaOrganiser1.Controllers
             return View(fileClass);
         }
 
-        // GET: FileClasses/Create
+        // Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: FileClasses/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        // Data from upload / create sent to database with post method here.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "FileClassId,Name,File,ContentType,Category,Genre")] FileClass fileClass, HttpPostedFileBase upload)
@@ -117,7 +124,7 @@ namespace MediaOrganiser1.Controllers
             return View(fileClass);
         }
 
-        // GET: FileClasses/Edit/5
+        // Edit.
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -132,9 +139,7 @@ namespace MediaOrganiser1.Controllers
             return View(fileClass);
         }
 
-        // POST: FileClasses/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        // Edits made to item sends changed data to database.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "FileClassId,Name,File,ContentType,Category")] FileClass fileClass)
@@ -148,7 +153,7 @@ namespace MediaOrganiser1.Controllers
             return View(fileClass);
         }
 
-        // GET: FileClasses/Delete/5
+        // Delete.
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -163,7 +168,7 @@ namespace MediaOrganiser1.Controllers
             return View(fileClass);
         }
 
-        // POST: FileClasses/Delete/5
+        // Removes deleted item from database.
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
