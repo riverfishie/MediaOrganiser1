@@ -105,10 +105,15 @@ namespace MediaOrganiser1.Controllers
             if (ModelState.IsValid)
    
             { 
-                if (fileClass.Category == "Photo")
+                if (fileClass.Category == "Photo" )
                 {
                     fileClass.Genre = null;
                 }
+                else if (fileClass.Category == "Video")
+                {
+                    fileClass.Genre = null;
+                }
+
                 if (upload != null)
                 {
                     int fileLength = upload.ContentLength;
@@ -151,7 +156,10 @@ namespace MediaOrganiser1.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(fileClass).State = EntityState.Modified;
+                //db.Entry(fileClass).State = EntityState.Modified;
+                db.FileClasses.Attach(fileClass);
+                db.Entry(fileClass).Property("Name").IsModified = true;
+                db.Entry(fileClass).Property("Category").IsModified = true;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

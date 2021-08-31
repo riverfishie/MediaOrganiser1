@@ -35,6 +35,9 @@
                 @Html.RadioButtonFor(m => m.Category, "Audio", htmlAttributes: new { @class = "radiobutton1", @id = "radiobutton1" })
                 @Html.Label("Photo")
                 @Html.RadioButtonFor(m => m.Category, "Photo", htmlAttributes: new { @class = "radiobutton2", @id = "radiobutton2" })
+                @Html.Label("Video")
+                @Html.RadioButtonFor(m => m.Category, "Video", htmlAttributes: new {@class = "radiobutton3", @id = "radiobutton3" })
+
                 @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -50,11 +53,11 @@
 
                 @Html.DropDownList("Genre", new List<SelectListItem>()
                 {
-                    new SelectListItem(){ Text= "Relaxing", Value = "Happy"},
-                     new SelectListItem(){ Text= "Upbeat", Value = "Relaxing"},
-                     new SelectListItem(){ Text= "Motivational", Value = "Action"},
-                     new SelectListItem(){ Text= "Emotional", Value = "Upbeat"},
-                     new SelectListItem(){ Text= "Action", Value = "Upbeat"},
+                    new SelectListItem(){ Text= "Relaxing", Value = "Relaxing"},
+                     new SelectListItem(){ Text= "Upbeat", Value = "Upbeat"},
+                     new SelectListItem(){ Text= "Motivational", Value = "Motivational"},
+                     new SelectListItem(){ Text= "Emotional", Value = "Emotional"},
+                     new SelectListItem(){ Text= "Action", Value = "Action"},
                 }, "Select Genre")
                 @Html.ValidationMessageFor(model => model.Genre, "", new { @class = "text-danger" })
             </div>
@@ -86,17 +89,25 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script>
+
         var selectedIndex = 0;
+
         $('input:radio').click(function ()
         {
             if ($(this).val() === "Photo")
-            {
+            { // Disables Genre dropdown if upload is a photo
+                $('#Genre').prop('disabled', true);
+                selectedIndex = $("#Genre").selectedIndex
+                $('#Genre').prop('selectedIndex', 0);
+            }
+            else if ($(this).val() === "Video")
+            { // Disables Genre dropdown if upload is a video
                 $('#Genre').prop('disabled', true);
                 selectedIndex = $("#Genre").selectedIndex
                 $('#Genre').prop('selectedIndex', 0);
             }
             else
-            {
+            { //Enables dropdown / removes disabled property
                 $('#Genre').prop('disabled', false);
                 $('#Genre').prop('selectedIndex', selectedIndex);
             }
